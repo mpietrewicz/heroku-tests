@@ -1,5 +1,7 @@
 import scrapy
-
+from scrapy.crawler import Crawler
+from scrapy.settings import Settings
+#from scrapy import log
 
 class QuotesSpider(scrapy.Spider):
     name = "quotes"
@@ -17,3 +19,11 @@ class QuotesSpider(scrapy.Spider):
         with open(filename, 'wb') as f:
             f.write(response.url)
         self.log('Saved file %s' % filename)
+
+		
+
+spider = QuotesSpider()
+crawler = Crawler(Settings())
+crawler.configure()
+crawler.crawl(spider)
+crawler.start()
