@@ -1,0 +1,2 @@
+# requirements.txt
+Scrapy==1.2.1
