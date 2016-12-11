@@ -46,7 +46,7 @@ class index:
 		runner = CrawlerRunner()
 		d = runner.crawl(MySpider, input='inputargument', urls=urls, xpaths=xpaths)
 		d.addBoth(lambda _: reactor.stop())
-		reactor.run() # the script will block here until the crawling is finished
+		reactor.run(installSignalHandlers=0) # the script will block here until the crawling is finished
 		
 		return json.dumps(pyDict)
 
