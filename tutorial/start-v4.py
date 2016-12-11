@@ -1,6 +1,7 @@
+from twisted.internet import reactor
 import scrapy
 from scrapy.crawler import CrawlerRunner
-
+from scrapy.utils.log import configure_logging
 
 class MySpider(scrapy.Spider):
     name = "MySpider"
@@ -15,9 +16,16 @@ class MySpider(scrapy.Spider):
 		for x in xpaths:
 			print response.xpath(x)
 
-process = CrawlerRunner({
-    'USER_AGENT': 'Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1)'
-})
+			
+
+configure_logging({'LOG_FORMAT': '%(levelname)s: %(message)s'})
+runner = CrawlerRunner()
+
+
+
+#process = CrawlerRunner({
+#    'USER_AGENT': 'Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1)'
+#})
 
 #dane wejsciowe:
 urls = [
@@ -26,6 +34,8 @@ urls = [
 xpath = "//h2[@class='offer-header']/a | //h2[@class='offer-header']/a/@href | //div[@class='offer-price']"
 xpaths = xpath.split(' | ')
 
-#process.crawl(MySpider)
-process.crawl(MySpider, input='inputargument', urls=urls, xpaths=xpaths, last='Bond')
-process.start() # the script will block here until the crawling is finished
+
+
+d = runner.crawl(MySpider, input='inputargument', urls=urls, xpaths=xpaths, last='Bond')
+d.addBoth(lambda _: reactor.stop())
+reactor.run() # the script will block here until the crawling is finished
